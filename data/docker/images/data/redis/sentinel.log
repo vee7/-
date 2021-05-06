@@ -1,0 +1,107 @@
+1:X 29 Apr 2021 09:12:06.819 # Can't chdir to '/redis/data': No such file or directory
+32:X 29 Apr 2021 09:20:56.494 # Can't chdir to '/redis/data': No such file or directory
+48:X 29 Apr 2021 09:26:06.262 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+48:X 29 Apr 2021 09:26:06.262 # Redis version=5.0.7, bits=64, commit=00000000, modified=0, pid=48, just started
+48:X 29 Apr 2021 09:26:06.262 # Configuration loaded
+                _._                                                  
+           _.-``__ ''-._                                             
+      _.-``    `.  `_.  ''-._           Redis 5.0.7 (00000000/0) 64 bit
+  .-`` .-```.  ```\/    _.,_ ''-._                                   
+ (    '      ,       .-`  | `,    )     Running in sentinel mode
+ |`-._`-...-` __...-.``-._|'` _.-'|     Port: 26380
+ |    `-._   `._    /     _.-'    |     PID: 48
+  `-._    `-._  `-./  _.-'    _.-'                                   
+ |`-._`-._    `-.__.-'    _.-'_.-'|                                  
+ |    `-._`-._        _.-'_.-'    |           http://redis.io        
+  `-._    `-._`-.__.-'_.-'    _.-'                                   
+ |`-._`-._    `-.__.-'    _.-'_.-'|                                  
+ |    `-._`-._        _.-'_.-'    |                                  
+  `-._    `-._`-.__.-'_.-'    _.-'                                   
+      `-._    `-.__.-'    _.-'                                       
+          `-._        _.-'                                           
+              `-.__.-'                                               
+
+48:X 29 Apr 2021 09:26:06.264 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+48:X 29 Apr 2021 09:26:06.266 # Sentinel ID is 0c424379424b7a320b7793f68a42154f0f4add3f
+48:X 29 Apr 2021 09:26:06.266 # +monitor master mymaster 192.168.138.77 6379 quorum 2
+48:signal-handler (1619688378) Received SIGINT scheduling shutdown...
+48:X 29 Apr 2021 09:26:18.454 # User requested shutdown...
+48:X 29 Apr 2021 09:26:18.454 * Saving the final RDB snapshot before exiting.
+48:X 29 Apr 2021 09:26:18.455 * DB saved on disk
+48:X 29 Apr 2021 09:26:18.455 * Removing the pid file.
+48:X 29 Apr 2021 09:26:18.455 # Sentinel is now ready to exit, bye bye...
+53:X 29 Apr 2021 09:27:06.341 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+53:X 29 Apr 2021 09:27:06.341 # Redis version=5.0.7, bits=64, commit=00000000, modified=0, pid=53, just started
+53:X 29 Apr 2021 09:27:06.341 # Configuration loaded
+                _._                                                  
+           _.-``__ ''-._                                             
+      _.-``    `.  `_.  ''-._           Redis 5.0.7 (00000000/0) 64 bit
+  .-`` .-```.  ```\/    _.,_ ''-._                                   
+ (    '      ,       .-`  | `,    )     Running in sentinel mode
+ |`-._`-...-` __...-.``-._|'` _.-'|     Port: 26380
+ |    `-._   `._    /     _.-'    |     PID: 54
+  `-._    `-._  `-./  _.-'    _.-'                                   
+ |`-._`-._    `-.__.-'    _.-'_.-'|                                  
+ |    `-._`-._        _.-'_.-'    |           http://redis.io        
+  `-._    `-._`-.__.-'_.-'    _.-'                                   
+ |`-._`-._    `-.__.-'    _.-'_.-'|                                  
+ |    `-._`-._        _.-'_.-'    |                                  
+  `-._    `-._`-.__.-'_.-'    _.-'                                   
+      `-._    `-.__.-'    _.-'                                       
+          `-._        _.-'                                           
+              `-.__.-'                                               
+
+54:X 29 Apr 2021 09:27:06.343 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+54:X 29 Apr 2021 09:27:06.343 # Sentinel ID is 0c424379424b7a320b7793f68a42154f0f4add3f
+54:X 29 Apr 2021 09:27:06.343 # +monitor master mymaster 192.168.138.77 6379 quorum 2
+54:X 29 Apr 2021 09:27:36.375 # +sdown master mymaster 192.168.138.77 6379
+32:X 29 Apr 2021 09:32:11.086 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+32:X 29 Apr 2021 09:32:11.086 # Redis version=5.0.7, bits=64, commit=00000000, modified=0, pid=32, just started
+32:X 29 Apr 2021 09:32:11.086 # Configuration loaded
+                _._                                                  
+           _.-``__ ''-._                                             
+      _.-``    `.  `_.  ''-._           Redis 5.0.7 (00000000/0) 64 bit
+  .-`` .-```.  ```\/    _.,_ ''-._                                   
+ (    '      ,       .-`  | `,    )     Running in sentinel mode
+ |`-._`-...-` __...-.``-._|'` _.-'|     Port: 26381
+ |    `-._   `._    /     _.-'    |     PID: 33
+  `-._    `-._  `-./  _.-'    _.-'                                   
+ |`-._`-._    `-.__.-'    _.-'_.-'|                                  
+ |    `-._`-._        _.-'_.-'    |           http://redis.io        
+  `-._    `-._`-.__.-'_.-'    _.-'                                   
+ |`-._`-._    `-.__.-'    _.-'_.-'|                                  
+ |    `-._`-._        _.-'_.-'    |                                  
+  `-._    `-._`-.__.-'_.-'    _.-'                                   
+      `-._    `-.__.-'    _.-'                                       
+          `-._        _.-'                                           
+              `-.__.-'                                               
+
+33:X 29 Apr 2021 09:32:11.088 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+33:X 29 Apr 2021 09:32:11.090 # Sentinel ID is 61a1e097555786b67eba0f13792c1a4b0a72a665
+33:X 29 Apr 2021 09:32:11.090 # +monitor master mymaster 192.168.138.77 6379 quorum 2
+33:X 29 Apr 2021 09:32:41.122 # +sdown master mymaster 192.168.138.77 6379
+32:X 29 Apr 2021 09:33:12.333 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+32:X 29 Apr 2021 09:33:12.333 # Redis version=5.0.7, bits=64, commit=00000000, modified=0, pid=32, just started
+32:X 29 Apr 2021 09:33:12.333 # Configuration loaded
+                _._                                                  
+           _.-``__ ''-._                                             
+      _.-``    `.  `_.  ''-._           Redis 5.0.7 (00000000/0) 64 bit
+  .-`` .-```.  ```\/    _.,_ ''-._                                   
+ (    '      ,       .-`  | `,    )     Running in sentinel mode
+ |`-._`-...-` __...-.``-._|'` _.-'|     Port: 26382
+ |    `-._   `._    /     _.-'    |     PID: 33
+  `-._    `-._  `-./  _.-'    _.-'                                   
+ |`-._`-._    `-.__.-'    _.-'_.-'|                                  
+ |    `-._`-._        _.-'_.-'    |           http://redis.io        
+  `-._    `-._`-.__.-'_.-'    _.-'                                   
+ |`-._`-._    `-.__.-'    _.-'_.-'|                                  
+ |    `-._`-._        _.-'_.-'    |                                  
+  `-._    `-._`-.__.-'_.-'    _.-'                                   
+      `-._    `-.__.-'    _.-'                                       
+          `-._        _.-'                                           
+              `-.__.-'                                               
+
+33:X 29 Apr 2021 09:33:12.336 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+33:X 29 Apr 2021 09:33:12.339 # Sentinel ID is 0a9442b91f0e2981bf054f400716e866246f9200
+33:X 29 Apr 2021 09:33:12.339 # +monitor master mymaster 192.168.138.77 6379 quorum 2
+33:X 29 Apr 2021 09:33:42.382 # +sdown master mymaster 192.168.138.77 6379

@@ -1,0 +1,73 @@
+1.构建
+docker build -t 镜像名（dockerhub账户/名称）:标签 .
+
+2.上传
+docker login
+docker push 镜像名
+
+3.拉取
+docker pull 镜像名
+
+4.创建容器
+docker run -itd -p 访问端口:映射端口 --name 容器名 镜像名 -v 挂载本地目录:容器目录
+如redis
+docker run -itd -p 6379:6379 --name redis5master yhw547966838/redis5:addconf -v /data/redis/5/data:/data
+
+5.进入容器
+docker exec -it 容器名 bash
+
+删除容器
+docker rm 容器名
+
+删除镜像
+docker rmi 镜像名
+
+开启/关闭容器
+docker start/stop 容器名
+
+查看所有的容器
+docker ps -a
+
+查看开启的容器
+docker ps
+
+镜像更名
+docker tag 旧名 新名
+
+——多容器集成环境
+
+构建好redis,php,nginx
+
+
+创建共享目录
+[root@localhost /]# mkdir docker
+[root@localhost /]# mkdir docker/images
+[root@localhost /]# mkdir docker/images/data/
+[root@localhost /]# mkdir docker/images/data/php
+[root@localhost /]# mkdir docker/images/data/nginx
+[root@localhost /]# mkdir docker/images/data/redis
+[root@localhost /]# mkdir docker/images/data/php/www
+[root@localhost /]# mkdir docker/images/data/nginx/conf
+
+构建容器
+docker run -itd -v /docker/images/data/nginx/conf:/usr/local/nginx/conf/ -p 8080:80 --name nginx1.4 nginx1.4
+docker run -itd -v /docker/images/data/php/www:/www -p 9001:9000 --name php-fpm-7 php7
+docker run -itd -p 6380:6379 --name redis5 redis5
+
+nginx.conf修改内容
+fastcgi_pass 宿主机IP:9001
+网站地址改为/www
+
+/docker/images/data/php/www下创建index.php
+<?php
+$redis = new Redis();
+$redis->connect('192.168.137.77', 6380);//serverip port
+$redis ->set( "test" , "Hello World");
+echo $redis ->get( "test");
+?>
+
+访问192.168.137.77:8080出现Hello World代表搭建成功
+
+分配IP
+docker network create --subnet=192.160.1.0/24 配置名
+docker run -itd --network=配置名 --ip 192.168.1.10 --name 容器名 镜像名

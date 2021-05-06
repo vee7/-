@@ -1,0 +1,49 @@
+主从延迟优化：
+1.不要使用shutdown，会造成全量复制，使用debug reload
+2.注意配置保持一直，否则可能出现数据丢失的严重问题
+3.代码实现主从维护
+原理：
+基于主从下读写分离的代码
+1.构造函数执行维护函数
+2.维护函数：
+	获取主节点连接 $this->conn["master"] = $this->ClientRedis($this->server["master"]["host"],$this->server["master"]["port"]);
+	搭配swoole，从主获取从的信息 $replInfo = $masterRedis->info('replication');
+	获取主节点偏移量 $masterOffset = $replInfo['master_repl_offset'];
+	声明可用的从节点$slaves=[];
+	遍历从节点
+	for ($i=0; $i < $replInfo['connected_slaves']; $i++) {
+		获取从节点信息转为数组 $slaveInfo = $this->stringToArr($replInfo['slave'.$i]);
+		从节点转为IP:PORT形式 $slaveFlag = $this->redisFlag($slaveInfo['ip'], $slaveInfo['port']);
+		判断延迟（偏移量）是否低于100
+		if (($masterOffset - $slaveInfo['offset']) < 100) {
+			低于100视为正常范围，可以访问
+			$ok_slave = ["host"=>$slaveInfo['ip'],"port"=>$slaveInfo['port']];
+			将其加入可用从节点数组，以便访问
+			array_push($slaves,$ok_slave);
+		}else{
+			否则延迟过大，避免用户访问不添加到可用节点，同时记录日志方便维护
+			$this->log("从节点：".$slaveInfo['ip'].":"."port"=>$slaveInfo['port']."因偏移量超过100，以避免访问，请及时检查该节点。");
+		}
+	}
+
+3.更改从节点连接函数，不再读取配置文件中的从节点，维护函数中已添加好了可用从节点
+protected function ClientSlaveRedis(){
+		$idx = mt_rand(0,count($slaves)-1);
+		$this->log = "连接从服务器：".$slaves[$idx]["host"].":".$slaves[$idx]["port"];
+		return $this->ClientRedis($slaves[$idx]["host"],$slaves[$idx]["port"]); 
+	}
+
+4.转为数组函数
+protected function stringToArr($str, $flag1 = ',', $flag2 = '=')
+    {
+        // "ip=192.160.1.130,port=6379,state=online,offset=72574,lag=0"
+        $arr = explode($flag1, $str);
+        $ret = [];
+        // $key ip
+        // $value 192.160.1.130
+        foreach ($arr as $key => $value) {
+            $arr2 = explode($flag2, $value);
+            $ret[$arr2[0]] = $arr2[1];
+        }
+        return $ret;
+    }

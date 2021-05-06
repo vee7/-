@@ -1,0 +1,61 @@
+————————————有两种持久化方式：
+————1.RDB持久化(无法实时备份，但恢复速度快)
+文件 dump.rdb
+目录 配置中dir的路径
+配置：redis.conf
+# 900s内至少达到一条写命令
+save 900 1
+# 300s内至少达至10条写命令
+save 300 10
+# 60s内至少达到10000条写命令
+save 60 10000
+
+
+
+————2.AOF持久化(实时备份，通过每秒或每次更改数据，文件大小比RDB大)
+文件 appendonly.aof
+目录 配置中dir的路径
+配置：redis.conf
+·appendonly yes #启用aof持久化方式
+·appendfsync always #每次收到写命令就立即强制写入磁盘，最慢的大概只有几百的TPS，但是保证完全的持久化，不推荐使用
+·appendfsync everysec #每秒钟强制写入磁盘一次，在性能和持久化方面做了很好的折中，推荐
+·appendfsync no #完全依赖os，性能最好,持久化没保证，Redis不会主动调用fsync去将AOF日志内容同步到磁盘，所以这一切就完全依赖于操作系统的
+调试了。对大多数Linux操作系统，是每30秒进行一次fsync，将缓冲区中的数据写到磁盘上。
+命令：
+·手动重写：bgrewriteaof #aof文件会越来越大，重写将压缩文件大小
+·自动触发：
+·auto-aof-rewrite-min-size：表示运行 AOF 重写时文件最小体积，默认为 64MB，超过64mb则重写。
+·auto-aof-rewrite-percentage：代表当前 AOF 文件空间（aof_current_size）和上一次重写后 AOF 文件空间（aof_base_size）的比值。
+示例：
+·auto-aof-rewrite-percentage：100
+·auto-aof-rewrite-min-size：64mb 默认配置是当AOF文件大小是上次rewrite后大小的一倍且文件大于64M时触发
+·aof-rewrite-incremental-fsync 32MB 每次批量写入硬盘数据量，默认为 32MB，防止单次刷盘数据过多造成硬盘阻塞。
+错误：
+在写入aof日志文件时，如果Redis服务器宕机，则aof日志文件文件会出格式错误，在重启Redis服务器时，Redis服务器会拒绝载入这个aof文件，
+可以通过命令修复aof并恢复数据
+·redis-check-aof -fix file.aof
+
+————持久化的选择
+1）如果Redis只用作于缓存层，那么无论是单机，还是主从架构，都可以不进行任何持久化。
+2）在单机环境下，如果可以接受十几分钟或更多的数据丢失，选择RDB对Redis的性能更加有利；如果只能接受秒级别的数据丢失，应该选择AOF。
+3）主从环境下，可以使用以下方案更加合理：
+master：完全关闭持久化（包括RDB和AOF），这样可以让master的性能达到最好；
+slave：关闭RDB，开启AOF（如果对数据安全要求不高，开启RDB关闭AOF也可以），并定时对持久化文件进行备份（如备份到其他文件夹,其他远程服务器，并标记好备份的时间，通常不低于一天一次）；然后关闭AOF的自动重写，然后添加定时任务，在每天Redis闲时（如凌晨12点）调用bgrewriteaof。
+
+应尽量避免“自动拉起机制”（redis宕机自动重启）和“不做持久化”同时出现，否则可能出现主从数据全部丢失的情况
+
+————企业级的持久化的配置策略
+RDB：
+save 60 10000：如果你希望尽可能确保说，RDB最多丢1分钟的数据，那么尽量就是每隔1分钟都生成一个快照，低峰期，数据量很少，也没必要10000->生成RDB，1000->RDB，这个根据你自己的应用和业务的数据量，你自己去决定
+
+AOF：
+appendfsync everysec
+auto-aof-rewrite-percentage 100: 就是当前AOF大小膨胀到超过上次100%，上次的两倍
+auto-aof-rewrite-min-size 64mb: 根据你的数据量来定，16mb，32mb
+
+数据备份方案
+（1）写crontab定时调度脚本去做数据备份
+（2）每小时都copy一份rdb的备份，到一个目录中去，仅仅保留最近48小时的备份
+（3）每天都保留一份当日的rdb的备份，到一个目录中去，仅仅保留最近1个月的备份
+（4）每次copy备份的时候，都把太旧的备份给删了
+（5）每天晚上将当前服务器上所有的数据备份，发送一份到远程的云服务上去【crontab】
